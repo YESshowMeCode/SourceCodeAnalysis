@@ -11,6 +11,7 @@ namespace UnityEngine.UI
     [DisallowMultipleComponent]
     /// <summary>
     /// Simple selectable object - derived from to create a selectable control.
+    /// selectable controller
     /// </summary>
     public class Selectable
         :

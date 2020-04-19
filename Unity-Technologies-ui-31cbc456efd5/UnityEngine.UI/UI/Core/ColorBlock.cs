@@ -6,6 +6,7 @@ namespace UnityEngine.UI
     [Serializable]
     /// <summary>
     ///   Structure to store the state of a color transition on a Selectable.
+    ///   在Selectable储存颜色数据的结构体
     /// </summary>
     public struct ColorBlock : IEquatable<ColorBlock>
     {

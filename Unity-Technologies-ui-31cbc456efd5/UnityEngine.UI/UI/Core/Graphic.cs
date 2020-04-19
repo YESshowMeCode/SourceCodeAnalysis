@@ -155,6 +155,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Should this graphic be considered a target for raycasting?
+        /// 是否需要射线检测
         /// </summary>
         public virtual bool raycastTarget { get { return m_RaycastTarget; } set { m_RaycastTarget = value; } }
 
@@ -311,6 +312,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Absolute depth of the graphic, used by rendering and events -- lowest to highest.
+        /// 图形的深度，用于渲染和事件
         /// </summary>
         /// <example>
         /// The depth is relative to the first root canvas.

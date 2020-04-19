@@ -6,6 +6,7 @@ namespace UnityEngine.UI
 {
     /// <summary>
     /// Values of 'update' called on a Canvas update.
+    /// 在一次canvas更新中 被更新顺序的值
     /// </summary>
     public enum CanvasUpdate
     {
@@ -37,6 +38,7 @@ namespace UnityEngine.UI
 
     /// <summary>
     /// This is an element that can live on a Canvas.
+    /// 在canvas上可以激活的组件
     /// </summary>
     public interface ICanvasElement
     {
@@ -53,23 +55,28 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Callback sent when this ICanvasElement has completed layout.
+        /// 当canvas元素以及布局好了的回调
         /// </summary>
         void LayoutComplete();
 
         /// <summary>
         /// Callback sent when this ICanvasElement has completed Graphic rebuild.
+        /// 当canvas元素可以完成重建的回调
         /// </summary>
         void GraphicUpdateComplete();
 
         /// <summary>
         /// Used if the native representation has been destroyed.
+        /// 如果原生表现已经被销毁调用
         /// </summary>
         /// <returns>Return true if the element is considered destroyed.</returns>
+        /// 如果原生被考虑销毁返回true
         bool IsDestroyed();
     }
 
     /// <summary>
     /// A place where CanvasElements can register themselves for rebuilding.
+    /// canvas元素注册网格重建的地方
     /// </summary>
     public class CanvasUpdateRegistry
     {
@@ -99,6 +106,7 @@ namespace UnityEngine.UI
             }
         }
 
+        //更新中物体是否有效
         private bool ObjectValidForUpdate(ICanvasElement element)
         {
             var valid = element != null;
@@ -110,6 +118,7 @@ namespace UnityEngine.UI
             return valid;
         }
 
+        ///清除掉无效的节点
         private void CleanInvalidItems()
         {
             // So MB's override the == operator for null equality, which checks
@@ -154,12 +163,14 @@ namespace UnityEngine.UI
         private static readonly Comparison<ICanvasElement> s_SortLayoutFunction = SortLayoutList;
         private void PerformUpdate()
         {
+            //开始采样
             UISystemProfilerApi.BeginSample(UISystemProfilerApi.SampleType.Layout);
             CleanInvalidItems();
 
             m_PerformingLayoutUpdate = true;
 
             m_LayoutRebuildQueue.Sort(s_SortLayoutFunction);
+            //布局之前
             for (int i = 0; i <= (int)CanvasUpdate.PostLayout; i++)
             {
                 for (int j = 0; j < m_LayoutRebuildQueue.Count; j++)
@@ -168,6 +179,7 @@ namespace UnityEngine.UI
                     try
                     {
                         if (ObjectValidForUpdate(rebuild))
+                            //执行网格重建
                             rebuild.Rebuild((CanvasUpdate)i);
                     }
                     catch (Exception e)
@@ -183,8 +195,9 @@ namespace UnityEngine.UI
             instance.m_LayoutRebuildQueue.Clear();
             m_PerformingLayoutUpdate = false;
 
-            // now layout is complete do culling...
+            // now layout is complete do culling... 布局完成剔除
             ClipperRegistry.instance.Cull();
+
 
             m_PerformingGraphicUpdate = true;
             for (var i = (int)CanvasUpdate.PreRender; i < (int)CanvasUpdate.MaxUpdateValue; i++)
@@ -209,6 +222,8 @@ namespace UnityEngine.UI
 
             instance.m_GraphicRebuildQueue.Clear();
             m_PerformingGraphicUpdate = false;
+
+            //结束采样
             UISystemProfilerApi.EndSample(UISystemProfilerApi.SampleType.Layout);
         }
 
@@ -227,6 +242,7 @@ namespace UnityEngine.UI
             return count;
         }
 
+        ///根据元素树的深度排序
         private static int SortLayoutList(ICanvasElement x, ICanvasElement y)
         {
             Transform t1 = x.transform;
@@ -237,6 +253,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Try and add the given element to the layout rebuild list.
+        /// 尝试添加被传入的元素到布局重建列表
         /// Will not return if successfully added.
         /// </summary>
         /// <param name="element">The element that is needing rebuilt.</param>
@@ -275,6 +292,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Try and add the given element to the rebuild list.
+        /// 尝试添加传入的元素到重建列表
         /// Will not return if successfully added.
         /// </summary>
         /// <param name="element">The element that is needing rebuilt.</param>
@@ -298,6 +316,7 @@ namespace UnityEngine.UI
 
         private bool InternalRegisterCanvasElementForGraphicRebuild(ICanvasElement element)
         {
+            //正在图形重建循环中，不支持添加
             if (m_PerformingGraphicUpdate)
             {
                 Debug.LogError(string.Format("Trying to add {0} for graphic rebuild while we are already inside a graphic rebuild loop. This is not supported.", element));

@@ -5,6 +5,7 @@ namespace UnityEngine.UI
 {
     /// <summary>
     ///   Registry which maps a Graphic to the canvas it belongs to
+    ///   注册一个图形到canvas的映射
     /// </summary>
     public class GraphicRegistry
     {
@@ -40,6 +41,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Store a link between the given canvas and graphic in the registry.
+        /// 
         /// </summary>
         /// <param name="c">The canvas the graphic will be associated to</param>
         /// <param name="graphic">The graphic in question.</param>

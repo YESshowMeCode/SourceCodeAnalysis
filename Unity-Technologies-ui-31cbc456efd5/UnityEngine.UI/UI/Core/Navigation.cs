@@ -6,6 +6,7 @@ namespace UnityEngine.UI
     [Serializable]
     /// <summary>
     /// Structure storing details related to navigation.
+    /// 储存导航相关细节的结构体
     /// </summary>
     public struct Navigation : IEquatable<Navigation>
     {

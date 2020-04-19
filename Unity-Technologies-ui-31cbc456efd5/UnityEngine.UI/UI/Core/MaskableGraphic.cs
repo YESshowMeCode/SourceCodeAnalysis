@@ -24,6 +24,13 @@ namespace UnityEngine.UI
         // m_IncludeForMasking is whether we actually consider this graphic for masking or not - this is an implementation detail.
         // m_IncludeForMasking should only be true if m_Maskable is true AND a parent of the graphic has an IMask component.
         // Things would still work correctly if m_IncludeForMasking was always true when m_Maskable is, but performance would suffer.
+
+        //m_Maskable是这个图形是否被允许被掩蔽。它有对应的公共是否遮蔽属性。
+        // m_Maskable的默认值是true，所以遮罩下的图形是默认被遮罩的。
+        //如果不需要屏蔽，用户可以从脚本中关闭屏蔽属性。
+        // m_IncludeForMasking是我们是否真正考虑这个图形掩蔽与否-这是一个实现细节。
+        // 如果m_Maskable是true和这个图形的父节点的m_Maskable为true，m_IncludeForMasking只能为true
+        //如果m_IncludeForMasking在m_Maskable时始终为真，那么事情仍然可以正常工作，但是性能会受到影响。
         [NonSerialized]
         private bool m_Maskable = true;
 

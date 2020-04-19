@@ -5,6 +5,7 @@ namespace UnityEngine.UI
 {
     /// <summary>
     /// Labels reference specific font data used to draw them. This class contains that data.
+    /// 标签引用特殊字体数据去draw。
     /// </summary>
 
     [Serializable]

@@ -5,6 +5,7 @@ namespace UnityEngine.UI
 {
     /// <summary>
     /// Utility class for creating default implementations of builtin UI controls.
+    /// 创建默认内置UI组件的工具类
     /// </summary>
     /// <remarks>
     /// The recommended workflow for using UI controls with the UI system is to create a prefab for each type of control and instantiate those when needed. This way changes can be made to the prefabs which immediately have effect on all used instances.

@@ -6,6 +6,7 @@ namespace UnityEngine.UI
 {
     /// <summary>
     ///   Utility class that is used to help with Text update.
+    ///   用来帮助Text组件更新的工具类
     /// </summary>
     /// <remarks>
     /// When Unity rebuilds a font atlas a callback is sent to the font. Using this class you can register your text as needing to be rebuilt if the font atlas is updated.
