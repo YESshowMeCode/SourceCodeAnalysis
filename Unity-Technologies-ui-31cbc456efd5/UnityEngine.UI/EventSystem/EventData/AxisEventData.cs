@@ -2,6 +2,7 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// Event Data associated with Axis Events (Controller / Keyboard).
+    /// 滚轮事件类
     /// </summary>
     public class AxisEventData : BaseEventData
     {
