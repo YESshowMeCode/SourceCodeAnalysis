@@ -6,6 +6,10 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// Each touch event creates one of these containing all the relevant information.
+    /// 点击事件类
+    /// 它存储了大部分的事件系统逻辑需要的数据，包括按下时的位置，松开与按下的时间差，
+    //  拖动的位移差，点击到的物体等等，承载了所有输入事件需要的数据。事件数据模块的意义
+    //  所在便是存储数据并为逻辑部分做好准备。
     /// </summary>
     public class PointerEventData : BaseEventData
     {
@@ -62,20 +66,24 @@ namespace UnityEngine.EventSystems
         public GameObject pointerEnter { get; set; }
 
         // The object that received OnPointerDown
+        //接收OnPointDown事件的物体
         private GameObject m_PointerPress;
 
         /// <summary>
         /// The raw GameObject for the last press event. This means that it is the 'pressed' GameObject even if it can not receive the press event itself.
+        /// 上一接收OnPointDown事件的物体
         /// </summary>
         public GameObject lastPress { get; private set; }
 
         /// <summary>
+        /// 接收按下事件的无法响应处理的物体
         /// The object that the press happened on even if it can not handle the press event.
         /// </summary>
         public GameObject rawPointerPress { get; set; }
 
         /// <summary>
         /// The object that is receiving 'OnDrag'.
+        /// 接收OnDrag事件的物体
         /// </summary>
         public GameObject pointerDrag { get; set; }
 
@@ -103,16 +111,19 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Current pointer position.
+        /// 目前触碰点的位置
         /// </summary>
         public Vector2 position { get; set; }
 
         /// <summary>
         /// Pointer delta since last update.
+        /// 滚轮的偏移速度
         /// </summary>
         public Vector2 delta { get; set; }
 
         /// <summary>
         /// Position of the press.
+        /// 按下的位置
         /// </summary>
         public Vector2 pressPosition { get; set; }
 
@@ -131,11 +142,13 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// The last time a click event was sent. Used for double click
+        /// 上次点击的时间，用来实现双击效果
         /// </summary>
         public float clickTime { get; set; }
 
         /// <summary>
         /// Number of clicks in a row.
+        /// 点击的次数
         /// </summary>
         /// <example>
         /// <code>
@@ -181,6 +194,7 @@ namespace UnityEngine.EventSystems
         /// </summary>
         public InputButton button { get; set; }
 
+        //构造函数
         public PointerEventData(EventSystem eventSystem) : base(eventSystem)
         {
             eligibleForClick = false;

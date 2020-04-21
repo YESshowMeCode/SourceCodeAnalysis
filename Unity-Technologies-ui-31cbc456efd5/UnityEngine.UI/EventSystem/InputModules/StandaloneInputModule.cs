@@ -7,6 +7,7 @@ namespace UnityEngine.EventSystems
     [AddComponentMenu("Event/Standalone Input Module")]
     /// <summary>
     /// A BaseInputModule designed for mouse / keyboard / controller input.
+    /// 向标准键盘鼠标输入扩展
     /// </summary>
     /// <remarks>
     /// Input module for working with, mouse, keyboard, or controller.
@@ -183,17 +184,20 @@ namespace UnityEngine.EventSystems
             m_MousePosition = input.mousePosition;
         }
 
+        //鼠标抬起事件
         private void ReleaseMouse(PointerEventData pointerEvent, GameObject currentOverGo)
         {
+            //执行抬起事件句柄
             ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler);
 
             var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
 
             // PointerClick and Drop events
+            // 吐过抬起与按下为同一元素，那就是点击
             if (pointerEvent.pointerPress == pointerUpHandler && pointerEvent.eligibleForClick)
             {
                 ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerClickHandler);
-            }
+            }//否则也可能是拖拽的释放
             else if (pointerEvent.pointerDrag != null && pointerEvent.dragging)
             {
                 ExecuteEvents.ExecuteHierarchy(currentOverGo, pointerEvent, ExecuteEvents.dropHandler);
@@ -203,6 +207,7 @@ namespace UnityEngine.EventSystems
             pointerEvent.pointerPress = null;
             pointerEvent.rawPointerPress = null;
 
+            // 如果正在拖拽则抬起事件等于拖拽结束事件
             if (pointerEvent.pointerDrag != null && pointerEvent.dragging)
                 ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.endDragHandler);
 
@@ -213,6 +218,7 @@ namespace UnityEngine.EventSystems
             // so that if we moused over something that ignored it before
             // due to having pressed on something else
             // it now gets it.
+            // 如果当前接收事件的物体和事件刚开始的物体不一致，则对两个物体做进和出的事件处理
             if (currentOverGo != pointerEvent.pointerEnter)
             {
                 HandlePointerExitAndEnter(pointerEvent, null);
@@ -540,6 +546,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Process all mouse events.
+        /// 处理所有鼠标事件
         /// </summary>
         protected void ProcessMouseEvent(int id)
         {
@@ -549,16 +556,19 @@ namespace UnityEngine.EventSystems
             m_CurrentFocusedGameObject = leftButtonData.buttonData.pointerCurrentRaycast.gameObject;
 
             // Process the first mouse button fully
+            // 处理鼠标左键相关事件
             ProcessMousePress(leftButtonData);
             ProcessMove(leftButtonData.buttonData);
             ProcessDrag(leftButtonData.buttonData);
 
             // Now process right / middle clicks
+            // 处理鼠标右键和中键的点击事件
             ProcessMousePress(mouseData.GetButtonState(PointerEventData.InputButton.Right).eventData);
             ProcessDrag(mouseData.GetButtonState(PointerEventData.InputButton.Right).eventData.buttonData);
             ProcessMousePress(mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData);
             ProcessDrag(mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData.buttonData);
 
+            //滚轮事件处理
             if (!Mathf.Approximately(leftButtonData.buttonData.scrollDelta.sqrMagnitude, 0.0f))
             {
                 var scrollHandler = ExecuteEvents.GetEventHandler<IScrollHandler>(leftButtonData.buttonData.pointerCurrentRaycast.gameObject);
@@ -578,6 +588,9 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Calculate and process any mouse button state changes.
+        /// 处理鼠标按下事件
+        /// 其实它不仅仅处理的是按下的操作，也同时处理鼠标抬起的操作，以及处理了拖拽启动和拖拽抬起与结束的事件。
+        /// 在调用处理相关句柄的前后，事件数据都会被保存在 pointerEvent 中，然后被传递给业务层中设置的输入事件句柄。
         /// </summary>
         protected void ProcessMousePress(MouseButtonEventData data)
         {
@@ -585,6 +598,7 @@ namespace UnityEngine.EventSystems
             var currentOverGo = pointerEvent.pointerCurrentRaycast.gameObject;
 
             // PointerDown notification
+            // 按下通知
             if (data.PressedThisFrame())
             {
                 pointerEvent.eligibleForClick = true;
@@ -599,9 +613,11 @@ namespace UnityEngine.EventSystems
                 // search for the control that will receive the press
                 // if we can't find a press handler set the press
                 // handler to be what would receive a click.
+                // 搜索元件中按下事件的句柄，并执行按下事件的句柄
                 var newPressed = ExecuteEvents.ExecuteHierarchy(currentOverGo, pointerEvent, ExecuteEvents.pointerDownHandler);
 
                 // didnt find a press handler... search for a click handler
+                // 找不到句柄，就设置一个自己的
                 if (newPressed == null)
                     newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
 
@@ -630,8 +646,10 @@ namespace UnityEngine.EventSystems
                 pointerEvent.clickTime = time;
 
                 // Save the drag handler as well
+                // 保存拖拽信息
                 pointerEvent.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(currentOverGo);
 
+                // 执行拖拽启动事件的句柄
                 if (pointerEvent.pointerDrag != null)
                     ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.initializePotentialDrag);
 
@@ -639,6 +657,7 @@ namespace UnityEngine.EventSystems
             }
 
             // PointerUp notification
+            // 抬起通知
             if (data.ReleasedThisFrame())
             {
                 ReleaseMouse(pointerEvent, currentOverGo);

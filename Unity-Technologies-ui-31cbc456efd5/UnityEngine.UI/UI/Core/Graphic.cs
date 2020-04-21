@@ -759,7 +759,9 @@ namespace UnityEngine.UI
         public virtual void SetNativeSize() {}
 
         /// <summary>
-        /// When a GraphicRaycaster is raycasting into the scene it does two things. First it filters the elements using their RectTransform rect. Then it uses this Raycast function to determine the elements hit by the raycast.
+        /// When a GraphicRaycaster is raycasting into the scene it does two things.
+        /// First it filters the elements using their RectTransform rect.
+        /// Then it uses this Raycast function to determine the elements hit by the raycast.
         /// </summary>
         /// <param name="sp">Screen point being tested</param>
         /// <param name="eventCamera">Camera that is being used for the testing.</param>

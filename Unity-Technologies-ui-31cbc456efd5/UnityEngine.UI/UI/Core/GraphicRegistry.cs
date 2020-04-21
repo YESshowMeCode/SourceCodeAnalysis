@@ -89,6 +89,7 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Get the list of associated graphics that are registered to a canvas.
+        /// 获取注册在一个Canvas下的组件
         /// </summary>
         /// <param name="canvas">The canvas whose Graphics we are looking for</param>
         /// <returns>The list of all Graphics for the given Canvas.</returns>

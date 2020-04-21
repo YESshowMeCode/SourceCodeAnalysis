@@ -112,6 +112,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Process all touch events.
+        /// 处理所有触摸事件
         /// </summary>
         private void ProcessTouchEvents()
         {

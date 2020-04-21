@@ -2,6 +2,7 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// A hit result from a BaseRaycaster.
+    /// 射线检测碰撞结果结构体
     /// </summary>
     public struct RaycastResult
     {
@@ -48,6 +49,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// The SortingOrder for the hit object.
+        /// 2D层次次序
         /// </summary>
         /// <remarks>
         /// For Graphic elements this will be the values from that graphics Canvas

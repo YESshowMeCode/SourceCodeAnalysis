@@ -6,9 +6,14 @@ namespace UnityEngine.EventSystems
     [RequireComponent(typeof(EventSystem))]
     /// <summary>
     /// A base module that raises events and sends them to GameObjects.
+    /// 产生事件并发送给GameObject的基础模块
     /// </summary>
     /// <remarks>
-    /// An Input Module is a component of the EventSystem that is responsible for raising events and sending them to GameObjects for handling. The BaseInputModule is a class that all Input Modules in the EventSystem inherit from. Examples of provided modules are TouchInputModule and StandaloneInputModule, if these are inadequate for your project you can create your own by extending from the BaseInputModule.
+    /// An Input Module is a component of the EventSystem that is responsible
+    /// for raising events and sending them to GameObjects for handling.
+    /// The BaseInputModule is a class that all Input Modules in the EventSystem inherit from.
+    /// Examples of provided modules are TouchInputModule and StandaloneInputModule,
+    /// if these are inadequate for your project you can create your own by extending from the BaseInputModule.
     /// </remarks>
     /// <example>
     /// <code>
@@ -47,6 +52,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// The current BaseInput being used by the input module.
+        /// 用于输入模块的基础输入
         /// </summary>
         public BaseInput input
         {
@@ -80,7 +86,8 @@ namespace UnityEngine.EventSystems
         /// Used to override the default BaseInput for the input module.
         /// </summary>
         /// <remarks>
-        /// With this it is possible to bypass the Input system with your own but still use the same InputModule. For example this can be used to feed fake input into the UI or interface with a different input system.
+        /// With this it is possible to bypass the Input system with your own but still use the same InputModule.
+        /// For example this can be used to feed fake input into the UI or interface with a different input system.
         /// </remarks>
         public BaseInput inputOverride
         {
@@ -108,6 +115,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Process the current tick for the module.
+        /// 处理当前模块的tick
         /// </summary>
         public abstract void Process();
 

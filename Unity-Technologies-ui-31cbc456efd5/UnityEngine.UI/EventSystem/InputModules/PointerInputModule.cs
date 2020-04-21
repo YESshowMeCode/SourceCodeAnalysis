@@ -11,24 +11,29 @@ namespace UnityEngine.EventSystems
     {
         /// <summary>
         /// Id of the cached left mouse pointer event.
+        /// 左键
         /// </summary>
         public const int kMouseLeftId = -1;
 
         /// <summary>
         /// Id of the cached right mouse pointer event.
+        /// 右键
         /// </summary>
         public const int kMouseRightId = -2;
 
         /// <summary>
         /// Id of the cached middle mouse pointer event.
+        /// 鼠标中键
         /// </summary>
         public const int kMouseMiddleId = -3;
 
         /// <summary>
         /// Touch id for when simulating touches on a non touch device.
+        /// 触摸
         /// </summary>
         public const int kFakeTouchesId = -4;
 
+        //事件数据集合
         protected Dictionary<int, PointerEventData> m_PointerData = new Dictionary<int, PointerEventData>();
 
         /// <summary>
@@ -248,6 +253,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Return the current MouseState.
+        /// 返回当前鼠标状态
         /// </summary>
         protected virtual MouseState GetMousePointerEventData(int id)
         {
@@ -317,6 +323,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Process movement for the current frame with the given pointer event.
+        /// 处理移动句柄
         /// </summary>
         protected virtual void ProcessMove(PointerEventData pointerEvent)
         {
@@ -326,9 +333,13 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Process the drag for the current frame with the given pointer event.
+        /// 拖拽处理函数
+        ///  ProcessDrag 拖拽句柄处理函数，与ProcessMousePress类似对拖拽事件逻辑做了判断，
+        ///  包括拖拽开始事件处理，判断结束拖拽事件，以及拖拽句柄的调用。
         /// </summary>
         protected virtual void ProcessDrag(PointerEventData pointerEvent)
         {
+            //如果已经在移动、且还没开始拖动启动事件，则调用拖拽启动句柄，并设置拖拽标记为true
             if (!pointerEvent.IsPointerMoving() ||
                 Cursor.lockState == CursorLockMode.Locked ||
                 pointerEvent.pointerDrag == null)
@@ -341,11 +352,12 @@ namespace UnityEngine.EventSystems
                 pointerEvent.dragging = true;
             }
 
-            // Drag notification
+            // Drag notification 拖拽时的句柄处理
             if (pointerEvent.dragging)
             {
                 // Before doing drag we should cancel any pointer down state
                 // And clear selection!
+                //如果按下的物体和拖拽的物体不是同一个则视为抬起拖拽，并清除前面按下的标记
                 if (pointerEvent.pointerPress != pointerEvent.pointerDrag)
                 {
                     ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler);
@@ -354,6 +366,7 @@ namespace UnityEngine.EventSystems
                     pointerEvent.pointerPress = null;
                     pointerEvent.rawPointerPress = null;
                 }
+                //执行拖拽中的句柄
                 ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.dragHandler);
             }
         }

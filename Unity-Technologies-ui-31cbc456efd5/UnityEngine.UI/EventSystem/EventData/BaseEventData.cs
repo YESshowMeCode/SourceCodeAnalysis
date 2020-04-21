@@ -2,6 +2,7 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// A class that can be used for sending simple events via the event system.
+    /// 基础事件抽象类
     /// </summary>
     public abstract class AbstractEventData
     {
@@ -37,6 +38,7 @@ namespace UnityEngine.EventSystems
 
     /// <summary>
     /// A class that contains the base event data that is common to all event types in the new EventSystem.
+    /// 事件基础类
     /// </summary>
     public class BaseEventData : AbstractEventData
     {

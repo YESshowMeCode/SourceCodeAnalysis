@@ -9,6 +9,12 @@ namespace UnityEngine.EventSystems
     [AddComponentMenu("Event/Event System")]
     /// <summary>
     /// Handles input, raycasting, and sending events.
+    /// EventSystem 主逻辑里只有300行代码基本上都在处理由射线碰撞检测后引起的各类事件。
+    /// 判断事件是否成立，成立则发起事件回调，不成立则继续轮询检查，等待事件的发生。
+    /// EventSystem 是事件处理模块中唯一继承 MonoBehavior 并且有在 Update 帧循环中做轮询的。
+    /// 也就是说，所有UI事件的发生都是通过 EventSystem 轮询监测到的并且实施的。
+    /// EventSystem 通过调用输入事件检测模块，检测碰撞模块，来形成自己主逻辑部分。
+    /// 因此可以说 EventSystem 是主逻辑类，是整个事件模块的入口。
     /// </summary>
     /// <remarks>
     /// The EventSystem is responsible for processing and handling events in a Unity scene. A scene should only contain one EventSystem. The EventSystem works in conjunction with a number of modules and mostly just holds state and delegates functionality to specific, overrideable components.
@@ -16,14 +22,18 @@ namespace UnityEngine.EventSystems
     /// </remarks>
     public class EventSystem : UIBehaviour
     {
+        //存储事件模块,存储的应该是StandaloneInputModule或者TouchInputModule类列表
         private List<BaseInputModule> m_SystemInputModules = new List<BaseInputModule>();
 
+        //用于获得当前输入模块
         private BaseInputModule m_CurrentInputModule;
 
+        // 定义了一个静态static的列表 m_EventSystems
         private  static List<EventSystem> m_EventSystems = new List<EventSystem>();
 
         /// <summary>
         /// Return the current EventSystem.
+        /// unity实际场景下有且仅有一个EventSystem
         /// </summary>
         public static EventSystem current
         {
@@ -119,6 +129,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Recalculate the internal list of BaseInputModules.
+        /// 一旦模块不存在或是未激活就进行移除
         /// </summary>
         public void UpdateModules()
         {
@@ -143,7 +154,9 @@ namespace UnityEngine.EventSystems
         }
 
         /// <summary>
-        /// Set the object as selected. Will send an OnDeselect the the old selected object and OnSelect to the new selected object.
+        /// Set the object as selected. Will send an OnDeselect the the old selected object
+        /// and OnSelect to the new selected object.
+        /// 用于设置当前物体被选中,并且发送OnDeselect事件给之前那个被选中的物体，发送OnSelect事件给当前物体。
         /// </summary>
         /// <param name="selected">GameObject to select.</param>
         /// <param name="pointer">Associated EventData.</param>
@@ -239,6 +252,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Raycast into the scene using all configured BaseRaycasters.
+        /// 更新当前射线检测的结果，并对射线碰撞到的所有物体进行由近至远的排序
         /// </summary>
         /// <param name="eventData">Current pointer data.</param>
         /// <param name="raycastResults">List of 'hits' to populate.</param>
@@ -260,6 +274,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Is the pointer with the given ID over an EventSystem object?
+        /// 判断是否点击到UI上
         /// </summary>
         public bool IsPointerOverGameObject()
         {
@@ -341,8 +356,11 @@ namespace UnityEngine.EventSystems
         {
             if (current != this)
                 return;
+
+            //执行子模块的updateModule
             TickModules();
 
+            //找到当前输入模块m_CurrentInputModule
             bool changedModule = false;
             for (var i = 0; i < m_SystemInputModules.Count; i++)
             {
@@ -374,6 +392,7 @@ namespace UnityEngine.EventSystems
             }
 
             if (!changedModule && m_CurrentInputModule != null)
+                //执行当前输入模块的事件
                 m_CurrentInputModule.Process();
         }
 

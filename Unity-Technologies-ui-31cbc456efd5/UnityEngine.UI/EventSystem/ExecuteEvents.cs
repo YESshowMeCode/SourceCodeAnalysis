@@ -234,7 +234,7 @@ namespace UnityEngine.EventSystems
         }
 
         private static readonly ObjectPool<List<IEventSystemHandler>> s_HandlerListPool = new ObjectPool<List<IEventSystemHandler>>(null, l => l.Clear());
-
+        //通过GetEventList获得targetGameObject上的T类型的组件列表，然后遍历这些组件，并执行EventFunction<T>委托functor(arg, eventData);。
         public static bool Execute<T>(GameObject target, BaseEventData eventData, EventFunction<T> functor) where T : IEventSystemHandler
         {
             var internalHandlers = s_HandlerListPool.Get();
@@ -278,11 +278,13 @@ namespace UnityEngine.EventSystems
 
         public static GameObject ExecuteHierarchy<T>(GameObject root, BaseEventData eventData, EventFunction<T> callbackFunction) where T : IEventSystemHandler
         {
+            //获取物体的所有父节点，包括它自己
             GetEventChain(root, s_InternalTransformList);
 
             for (var i = 0; i < s_InternalTransformList.Count; i++)
             {
                 var transform = s_InternalTransformList[i];
+                //对每个父节点包括自己依次执行句柄响应。也就是说，当前节点的事件会通知给它上面的父节点。
                 if (Execute(transform.gameObject, eventData, callbackFunction))
                     return transform.gameObject;
             }

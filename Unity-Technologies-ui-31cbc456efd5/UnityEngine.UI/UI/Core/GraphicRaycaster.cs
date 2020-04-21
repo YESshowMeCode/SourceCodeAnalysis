@@ -10,6 +10,8 @@ namespace UnityEngine.UI
     [RequireComponent(typeof(Canvas))]
     /// <summary>
     /// A derived BaseRaycaster to raycast against Graphic elements.
+    ///   它主要针对 ScreenSpaceOverlay 模式下输入点位做碰撞检测，因为这个模式下的检测并不依赖于射线碰撞，
+    ///   而是遍历所有可点击的UGUI元素来检测比较，从而判断是该响应哪个UI元素。
     /// </summary>
     public class GraphicRaycaster : BaseRaycaster
     {
@@ -112,6 +114,9 @@ namespace UnityEngine.UI
 
         /// <summary>
         /// Perform the raycast against the list of graphics associated with the Canvas.
+        /// GraphicRaycaster 对每个可以点击的元素(raycastTarget是否为true，并且 depth 不为-1，
+        /// 为可点击元素)进行计算，判断点位是否落在该元素上。再通过 depth 变量排序，
+        /// 判断最先该落在哪个元素上，从而确定哪个元素响应输入事件。
         /// </summary>
         /// <param name="eventData">Current event data</param>
         /// <param name="resultAppendList">List of hit objects to append new results to.</param>

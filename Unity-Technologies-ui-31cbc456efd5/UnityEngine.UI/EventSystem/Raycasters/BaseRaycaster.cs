@@ -5,6 +5,7 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// Base class for any RayCaster.
+    /// 射线检测的基础类
     /// </summary>
     /// <remarks>
     /// A Raycaster is responsible for raycasting against scene elements to determine if the cursor is over them. Default Raycasters include PhysicsRaycaster, Physics2DRaycaster, GraphicRaycaster.
