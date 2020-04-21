@@ -2,6 +2,7 @@ namespace UnityEngine.EventSystems
 {
     /// <summary>
     /// Base class that all EventSystem events inherit from.
+    /// 所有输入相关接口的基类
     /// </summary>
     public interface IEventSystemHandler
     {

@@ -33,7 +33,7 @@ namespace UnityEngine.EventSystems
 
         /// <summary>
         /// Return the current EventSystem.
-        /// unity实际场景下有且仅有一个EventSystem
+        /// unity实际场景下有且仅有一个EventSystem，处理所有输入的EventSystem
         /// </summary>
         public static EventSystem current
         {
